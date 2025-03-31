@@ -240,7 +240,7 @@ const App: React.FC = () => {
             </div>
 
             <div className="border-t border-white/10 pt-8">
-              <CoinSelector />
+              <CoinSelector walletAddress={wallet?.account.address || ''} />
             </div>
           </>
         );

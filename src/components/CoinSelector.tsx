@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import TransferPage from './TransferPage';
 
 interface CoinPrice {
   ethereum: {
@@ -16,7 +17,11 @@ interface CoinPrice {
   };
 }
 
-const CoinSelector: React.FC = () => {
+interface CoinSelectorProps {
+  walletAddress: string;
+}
+
+const CoinSelector: React.FC<CoinSelectorProps> = ({ walletAddress }) => {
   const [selectedCoin, setSelectedCoin] = useState<'ethereum' | 'solana'>('ethereum');
   const [price, setPrice] = useState<CoinPrice>({
     ethereum: {
@@ -32,6 +37,7 @@ const CoinSelector: React.FC = () => {
       last_updated: ''
     }
   });
+  const [showTransferPage, setShowTransferPage] = useState(false);
 
   useEffect(() => {
     const fetchPrices = async () => {
@@ -86,6 +92,10 @@ const CoinSelector: React.FC = () => {
     return date.toLocaleTimeString();
   };
 
+  if (showTransferPage) {
+    return <TransferPage onBack={() => setShowTransferPage(false)} coinType={selectedCoin} />;
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex justify-center space-x-4">
@@ -135,21 +145,20 @@ const CoinSelector: React.FC = () => {
         </div>
       </div>
 
-      {/* Send/Receive Buttons */}
-      <div className="flex justify-center space-x-4 mt-6">
-        <button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-base px-6 py-3 text-center transition-all duration-200 shadow-lg shadow-purple-500/25 flex items-center space-x-2">
+      {/* Send Button */}
+      <div className="flex justify-center mt-6">
+        <button 
+          onClick={() => setShowTransferPage(true)}
+          className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-xl text-base px-6 py-3 text-center transition-all duration-200 shadow-lg shadow-purple-500/25 flex items-center space-x-2"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
           </svg>
           <span>Send {selectedCoin.charAt(0).toUpperCase() + selectedCoin.slice(1)}</span>
         </button>
-        <button className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-xl text-base px-6 py-3 text-center transition-all duration-200 shadow-lg shadow-pink-500/25 flex items-center space-x-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4m0 0l6-6m-6 6l6 6" />
-          </svg>
-          <span>Receive {selectedCoin.charAt(0).toUpperCase() + selectedCoin.slice(1)}</span>
-        </button>
       </div>
+
+      
     </div>
   );
 };
