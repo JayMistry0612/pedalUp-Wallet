@@ -1,0 +1,17 @@
+{
+  "short_name": "Pixel",
+  "name": "Pixel Web3 Wallet",
+  "description": "A crypto wallet.",
+  "manifest_version": 3,
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Open Wallet"
+  },
+  "permissions": [],
+  "icons": {
+    "16": "icon.svg",
+    "48": "icon.svg",
+    "128": "icon.svg"
+  }
+}
